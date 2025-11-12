@@ -9,6 +9,13 @@ const Dashboard: React.FC = () => {
 
   const modules = [
     { 
+      name: 'analytics', 
+      title: 'Analytics & Reporting', 
+      icon: '📊',
+      description: 'Reports, dashboards, insights',
+      link: '/analytics'
+    },
+    { 
       name: 'communication', 
       title: 'Communication', 
       icon: '💬',

@@ -241,6 +241,25 @@ const moduleConfigSchema = new mongoose.Schema({
         badgeDisplay: { type: Boolean, default: true },
         leaderboards: { type: Boolean, default: false }
       }
+    },
+
+    // Analytics & Reporting
+    analytics: {
+      enabled: { type: Boolean, default: false },
+      features: {
+        customReports: { type: Boolean, default: true },
+        scheduledReports: { type: Boolean, default: true },
+        dataExport: { type: Boolean, default: true },
+        interactiveDashboards: { type: Boolean, default: true },
+        comparativeAnalytics: { type: Boolean, default: true },
+        heatMaps: { type: Boolean, default: false },
+        predictiveAnalytics: { type: Boolean, default: false },
+        performanceMetrics: { type: Boolean, default: true },
+        customDashboards: { type: Boolean, default: true },
+        reportTemplates: { type: Boolean, default: true },
+        reportSharing: { type: Boolean, default: true },
+        dataVisualization: { type: Boolean, default: true }
+      }
     }
   },
 

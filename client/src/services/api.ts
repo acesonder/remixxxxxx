@@ -115,4 +115,24 @@ export const settingsAPI = {
   exportData: () => api.get('/settings/export'),
 };
 
+// Analytics API
+export const analyticsAPI = {
+  // Reports
+  getReports: (params?: any) => api.get('/analytics/reports', { params }),
+  getReport: (id: string) => api.get(`/analytics/reports/${id}`),
+  createReport: (data: any) => api.post('/analytics/reports', data),
+  updateReport: (id: string, data: any) => api.put(`/analytics/reports/${id}`, data),
+  deleteReport: (id: string) => api.delete(`/analytics/reports/${id}`),
+  generateReport: (id: string) => api.post(`/analytics/reports/${id}/generate`),
+  exportReport: (id: string, format: string) => 
+    api.get(`/analytics/reports/${id}/export`, { params: { format } }),
+  
+  // Dashboards
+  getDashboards: () => api.get('/analytics/dashboards'),
+  getDashboard: (id: string) => api.get(`/analytics/dashboards/${id}`),
+  createDashboard: (data: any) => api.post('/analytics/dashboards', data),
+  updateDashboard: (id: string, data: any) => api.put(`/analytics/dashboards/${id}`, data),
+  deleteDashboard: (id: string) => api.delete(`/analytics/dashboards/${id}`),
+};
+
 export default api;

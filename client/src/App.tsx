@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import ModuleConfigurator from './pages/ModuleConfigurator';
+import Analytics from './pages/Analytics';
 import './App.css';
 
 const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -106,6 +107,14 @@ function App() {
                   <AdminRoute>
                     <ModuleConfigurator />
                   </AdminRoute>
+                } 
+              />
+              <Route 
+                path="/analytics" 
+                element={
+                  <PrivateRoute>
+                    <Analytics />
+                  </PrivateRoute>
                 } 
               />
               <Route path="/" element={<Navigate to="/dashboard" />} />
