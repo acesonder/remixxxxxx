@@ -260,6 +260,25 @@ const moduleConfigSchema = new mongoose.Schema({
         reportSharing: { type: Boolean, default: true },
         dataVisualization: { type: Boolean, default: true }
       }
+    },
+
+    // Appointment & Calendar
+    appointments: {
+      enabled: { type: Boolean, default: false },
+      features: {
+        appointmentBooking: { type: Boolean, default: true },
+        calendarIntegration: { type: Boolean, default: false },
+        recurringAppointments: { type: Boolean, default: true },
+        reminderNotifications: { type: Boolean, default: true },
+        availabilityManagement: { type: Boolean, default: true },
+        waitlistManagement: { type: Boolean, default: true },
+        groupSessions: { type: Boolean, default: true },
+        videoCallIntegration: { type: Boolean, default: false },
+        appointmentHistory: { type: Boolean, default: true },
+        resourceBooking: { type: Boolean, default: false },
+        timezoneSupport: { type: Boolean, default: true },
+        appointmentTypes: { type: Boolean, default: true }
+      }
     }
   },
 
