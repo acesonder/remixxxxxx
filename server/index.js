@@ -21,6 +21,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Rate limiting
+const { apiLimiter, authLimiter } = require('./middleware/rateLimiter');
+app.use('/api/', apiLimiter);
+
 // Routes
 const authRoutes = require('./routes/auth');
 const moduleRoutes = require('./routes/modules');
@@ -32,7 +36,7 @@ const caseManagementRoutes = require('./routes/caseManagement');
 const resourceRoutes = require('./routes/resources');
 const settingsRoutes = require('./routes/settings');
 
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/modules', moduleRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/messages', messageRoutes);
