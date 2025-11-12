@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useModules } from '../context/ModuleContext';
-import { moduleAPI } from '../services/api';
 
 const ModuleConfigurator: React.FC = () => {
   const { config, updateConfig } = useModules();
