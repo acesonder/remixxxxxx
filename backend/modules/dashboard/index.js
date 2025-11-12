@@ -195,9 +195,17 @@ module.exports = (io, moduleManager) => {
       return res.status(404).json({ error: 'Widget not found in dashboard' });
     }
 
+    // Prevent prototype pollution by filtering out dangerous keys
+    const safeConfig = Object.keys(config)
+      .filter(key => !['__proto__', 'constructor', 'prototype'].includes(key))
+      .reduce((obj, key) => {
+        obj[key] = config[key];
+        return obj;
+      }, {});
+
     dashboard.widgets[widgetId].config = {
       ...dashboard.widgets[widgetId].config,
-      ...config
+      ...safeConfig
     };
 
     dashboard.updatedAt = new Date().toISOString();
