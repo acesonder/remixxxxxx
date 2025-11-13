@@ -393,6 +393,44 @@ const moduleConfigSchema = new mongoose.Schema({
         trainingRequirements: { type: Boolean, default: true },
         documentManagement: { type: Boolean, default: true }
       }
+    },
+
+    // Transportation
+    transportation: {
+      enabled: { type: Boolean, default: false },
+      features: {
+        rideScheduling: { type: Boolean, default: true },
+        vehicleManagement: { type: Boolean, default: true },
+        driverManagement: { type: Boolean, default: true },
+        gpsTracking: { type: Boolean, default: true },
+        routeOptimization: { type: Boolean, default: true },
+        rideRequests: { type: Boolean, default: true },
+        recurringRides: { type: Boolean, default: true },
+        realTimeTracking: { type: Boolean, default: true },
+        mileageTracking: { type: Boolean, default: true },
+        maintenanceScheduling: { type: Boolean, default: true },
+        rideRatings: { type: Boolean, default: true },
+        reportingAnalytics: { type: Boolean, default: true }
+      }
+    },
+
+    // Housing Services
+    housingServices: {
+      enabled: { type: Boolean, default: false },
+      features: {
+        unitInventory: { type: Boolean, default: true },
+        housingApplications: { type: Boolean, default: true },
+        leaseManagement: { type: Boolean, default: true },
+        waitlistManagement: { type: Boolean, default: true },
+        rentCollection: { type: Boolean, default: true },
+        maintenanceRequests: { type: Boolean, default: true },
+        inspections: { type: Boolean, default: true },
+        tenantPortal: { type: Boolean, default: true },
+        occupancyTracking: { type: Boolean, default: true },
+        subsidyManagement: { type: Boolean, default: true },
+        leaseRenewal: { type: Boolean, default: true },
+        reportingAnalytics: { type: Boolean, default: true }
+      }
     }
   },
 
