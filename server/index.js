@@ -41,6 +41,7 @@ const documentRoutes = require('./routes/documents');
 const financialRoutes = require('./routes/financial');
 const surveyRoutes = require('./routes/surveys');
 const trainingRoutes = require('./routes/training');
+const inventoryRoutes = require('./routes/inventory');
 
 app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/modules', moduleRoutes);
@@ -57,6 +58,7 @@ app.use('/api/documents', documentRoutes);
 app.use('/api/financial', financialRoutes);
 app.use('/api/surveys', surveyRoutes);
 app.use('/api/training', trainingRoutes);
+app.use('/api/inventory', inventoryRoutes);
 
 // Socket.IO for real-time features
 io.on('connection', (socket) => {

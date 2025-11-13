@@ -355,6 +355,25 @@ const moduleConfigSchema = new mongoose.Schema({
         webinarIntegration: { type: Boolean, default: false },
         competencyFramework: { type: Boolean, default: true }
       }
+    },
+
+    // Inventory Management
+    inventoryManagement: {
+      enabled: { type: Boolean, default: false },
+      features: {
+        stockTracking: { type: Boolean, default: true },
+        equipmentCheckout: { type: Boolean, default: true },
+        barcodeScanning: { type: Boolean, default: false },
+        lowStockAlerts: { type: Boolean, default: true },
+        purchaseOrders: { type: Boolean, default: true },
+        supplierManagement: { type: Boolean, default: true },
+        inventoryReports: { type: Boolean, default: true },
+        assetTracking: { type: Boolean, default: true },
+        locationManagement: { type: Boolean, default: true },
+        expirationTracking: { type: Boolean, default: true },
+        costTracking: { type: Boolean, default: true },
+        bulkOperations: { type: Boolean, default: true }
+      }
     }
   },
 
