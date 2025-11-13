@@ -336,6 +336,25 @@ const moduleConfigSchema = new mongoose.Schema({
         trendAnalysis: { type: Boolean, default: true },
         followUpActions: { type: Boolean, default: false }
       }
+    },
+
+    // Training & Compliance
+    trainingCompliance: {
+      enabled: { type: Boolean, default: false },
+      features: {
+        courseManagement: { type: Boolean, default: true },
+        lessonBuilder: { type: Boolean, default: true },
+        quizSystem: { type: Boolean, default: true },
+        progressTracking: { type: Boolean, default: true },
+        certificationManagement: { type: Boolean, default: true },
+        complianceTracking: { type: Boolean, default: true },
+        certificateTemplates: { type: Boolean, default: true },
+        scormSupport: { type: Boolean, default: false },
+        expirationReminders: { type: Boolean, default: true },
+        trainingTranscripts: { type: Boolean, default: true },
+        webinarIntegration: { type: Boolean, default: false },
+        competencyFramework: { type: Boolean, default: true }
+      }
     }
   },
 
