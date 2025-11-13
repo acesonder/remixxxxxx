@@ -374,6 +374,25 @@ const moduleConfigSchema = new mongoose.Schema({
         costTracking: { type: Boolean, default: true },
         bulkOperations: { type: Boolean, default: true }
       }
+    },
+
+    // Volunteer Management
+    volunteerManagement: {
+      enabled: { type: Boolean, default: false },
+      features: {
+        volunteerRegistration: { type: Boolean, default: true },
+        backgroundChecks: { type: Boolean, default: true },
+        shiftScheduling: { type: Boolean, default: true },
+        hourTracking: { type: Boolean, default: true },
+        skillsMatching: { type: Boolean, default: true },
+        recognitionPrograms: { type: Boolean, default: true },
+        volunteerGroups: { type: Boolean, default: true },
+        availabilityManagement: { type: Boolean, default: true },
+        communication: { type: Boolean, default: true },
+        reportsAnalytics: { type: Boolean, default: true },
+        trainingRequirements: { type: Boolean, default: true },
+        documentManagement: { type: Boolean, default: true }
+      }
     }
   },
 
