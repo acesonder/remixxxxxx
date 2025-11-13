@@ -317,6 +317,25 @@ const moduleConfigSchema = new mongoose.Schema({
         paymentGateway: { type: Boolean, default: false },
         pledgeTracking: { type: Boolean, default: true }
       }
+    },
+
+    // Survey & Feedback
+    surveyFeedback: {
+      enabled: { type: Boolean, default: false },
+      features: {
+        surveyBuilder: { type: Boolean, default: true },
+        multipleQuestionTypes: { type: Boolean, default: true },
+        conditionalLogic: { type: Boolean, default: true },
+        anonymousSurveys: { type: Boolean, default: true },
+        multiLanguage: { type: Boolean, default: false },
+        npsTracking: { type: Boolean, default: true },
+        responseAnalytics: { type: Boolean, default: true },
+        exportResults: { type: Boolean, default: true },
+        surveyTemplates: { type: Boolean, default: true },
+        automatedDistribution: { type: Boolean, default: false },
+        trendAnalysis: { type: Boolean, default: true },
+        followUpActions: { type: Boolean, default: false }
+      }
     }
   },
 
