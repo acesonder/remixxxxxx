@@ -279,6 +279,25 @@ const moduleConfigSchema = new mongoose.Schema({
         timezoneSupport: { type: Boolean, default: true },
         appointmentTypes: { type: Boolean, default: true }
       }
+    },
+
+    // Document Management
+    documentManagement: {
+      enabled: { type: Boolean, default: false },
+      features: {
+        documentTemplates: { type: Boolean, default: true },
+        eSignatures: { type: Boolean, default: true },
+        versionControl: { type: Boolean, default: true },
+        documentWorkflow: { type: Boolean, default: true },
+        ocrProcessing: { type: Boolean, default: false },
+        documentExpiration: { type: Boolean, default: true },
+        accessControl: { type: Boolean, default: true },
+        documentTags: { type: Boolean, default: true },
+        fullTextSearch: { type: Boolean, default: true },
+        bulkOperations: { type: Boolean, default: false },
+        documentSharing: { type: Boolean, default: true },
+        auditTrail: { type: Boolean, default: true }
+      }
     }
   },
 

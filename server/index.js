@@ -37,6 +37,7 @@ const resourceRoutes = require('./routes/resources');
 const settingsRoutes = require('./routes/settings');
 const analyticsRoutes = require('./routes/analytics');
 const appointmentRoutes = require('./routes/appointments');
+const documentRoutes = require('./routes/documents');
 
 app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/modules', moduleRoutes);
@@ -49,6 +50,7 @@ app.use('/api/resources', resourceRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/appointments', appointmentRoutes);
+app.use('/api/documents', documentRoutes);
 
 // Socket.IO for real-time features
 io.on('connection', (socket) => {
