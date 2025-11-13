@@ -298,6 +298,25 @@ const moduleConfigSchema = new mongoose.Schema({
         documentSharing: { type: Boolean, default: true },
         auditTrail: { type: Boolean, default: true }
       }
+    },
+
+    // Financial Management
+    financialManagement: {
+      enabled: { type: Boolean, default: false },
+      features: {
+        invoiceGeneration: { type: Boolean, default: true },
+        paymentProcessing: { type: Boolean, default: true },
+        grantTracking: { type: Boolean, default: true },
+        budgetManagement: { type: Boolean, default: true },
+        expenseTracking: { type: Boolean, default: true },
+        donationManagement: { type: Boolean, default: true },
+        taxReceipts: { type: Boolean, default: true },
+        financialReports: { type: Boolean, default: true },
+        billingCodes: { type: Boolean, default: false },
+        recurringPayments: { type: Boolean, default: false },
+        paymentGateway: { type: Boolean, default: false },
+        pledgeTracking: { type: Boolean, default: true }
+      }
     }
   },
 
