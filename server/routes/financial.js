@@ -6,7 +6,7 @@ const { protect, authorize } = require('../middleware/auth');
 // ========== INVOICE ROUTES ==========
 
 // Get all invoices
-router.get('/invoices', protect, authorize('admin', 'staff'), async (req, res) => {
+router.get('/invoices', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const { clientId, status, startDate, endDate } = req.query;
     let query = {};
@@ -32,7 +32,7 @@ router.get('/invoices', protect, authorize('admin', 'staff'), async (req, res) =
 });
 
 // Create invoice
-router.post('/invoices', protect, authorize('admin', 'staff'), async (req, res) => {
+router.post('/invoices', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const invoiceData = {
       ...req.body,
@@ -51,7 +51,7 @@ router.post('/invoices', protect, authorize('admin', 'staff'), async (req, res) 
 });
 
 // Update invoice
-router.put('/invoices/:id', protect, authorize('admin', 'staff'), async (req, res) => {
+router.put('/invoices/:id', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const invoice = await Invoice.findByIdAndUpdate(
       req.params.id,
@@ -72,7 +72,7 @@ router.put('/invoices/:id', protect, authorize('admin', 'staff'), async (req, re
 // ========== PAYMENT ROUTES ==========
 
 // Get all payments
-router.get('/payments', protect, authorize('admin', 'staff'), async (req, res) => {
+router.get('/payments', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const { clientId, status, startDate, endDate } = req.query;
     let query = {};
@@ -99,7 +99,7 @@ router.get('/payments', protect, authorize('admin', 'staff'), async (req, res) =
 });
 
 // Create payment
-router.post('/payments', protect, authorize('admin', 'staff'), async (req, res) => {
+router.post('/payments', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const paymentData = {
       ...req.body,
@@ -139,7 +139,7 @@ router.post('/payments', protect, authorize('admin', 'staff'), async (req, res) 
 // ========== GRANT ROUTES ==========
 
 // Get all grants
-router.get('/grants', protect, authorize('admin', 'staff'), async (req, res) => {
+router.get('/grants', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const { status, fundingSource } = req.query;
     let query = {};
@@ -158,7 +158,7 @@ router.get('/grants', protect, authorize('admin', 'staff'), async (req, res) => 
 });
 
 // Create grant
-router.post('/grants', protect, authorize('admin', 'staff'), async (req, res) => {
+router.post('/grants', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const grantData = {
       ...req.body,
@@ -175,7 +175,7 @@ router.post('/grants', protect, authorize('admin', 'staff'), async (req, res) =>
 });
 
 // Add expenditure to grant
-router.post('/grants/:id/expenditures', protect, authorize('admin', 'staff'), async (req, res) => {
+router.post('/grants/:id/expenditures', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const grant = await Grant.findById(req.params.id);
     
@@ -197,7 +197,7 @@ router.post('/grants/:id/expenditures', protect, authorize('admin', 'staff'), as
 // ========== DONATION ROUTES ==========
 
 // Get all donations
-router.get('/donations', protect, authorize('admin', 'staff'), async (req, res) => {
+router.get('/donations', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const { donationType, campaign, startDate, endDate } = req.query;
     let query = {};
@@ -222,7 +222,7 @@ router.get('/donations', protect, authorize('admin', 'staff'), async (req, res) 
 });
 
 // Create donation
-router.post('/donations', protect, authorize('admin', 'staff'), async (req, res) => {
+router.post('/donations', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const donationData = {
       ...req.body,
@@ -240,7 +240,7 @@ router.post('/donations', protect, authorize('admin', 'staff'), async (req, res)
 });
 
 // Issue tax receipt
-router.patch('/donations/:id/tax-receipt', protect, authorize('admin', 'staff'), async (req, res) => {
+router.patch('/donations/:id/tax-receipt', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const donation = await Donation.findById(req.params.id);
     
@@ -262,7 +262,7 @@ router.patch('/donations/:id/tax-receipt', protect, authorize('admin', 'staff'),
 // ========== BUDGET ROUTES ==========
 
 // Get all budgets
-router.get('/budgets', protect, authorize('admin', 'staff'), async (req, res) => {
+router.get('/budgets', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const { fiscalYear, status } = req.query;
     let query = {};
@@ -281,7 +281,7 @@ router.get('/budgets', protect, authorize('admin', 'staff'), async (req, res) =>
 });
 
 // Create budget
-router.post('/budgets', protect, authorize('admin'), async (req, res) => {
+router.post('/budgets', protect, authorize(['admin']), async (req, res) => {
   try {
     const budgetData = {
       ...req.body,
@@ -299,7 +299,7 @@ router.post('/budgets', protect, authorize('admin'), async (req, res) => {
 });
 
 // Update budget
-router.put('/budgets/:id', protect, authorize('admin'), async (req, res) => {
+router.put('/budgets/:id', protect, authorize(['admin']), async (req, res) => {
   try {
     const budget = await Budget.findByIdAndUpdate(
       req.params.id,
@@ -320,7 +320,7 @@ router.put('/budgets/:id', protect, authorize('admin'), async (req, res) => {
 // ========== EXPENSE ROUTES ==========
 
 // Get all expenses
-router.get('/expenses', protect, authorize('admin', 'staff'), async (req, res) => {
+router.get('/expenses', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const { category, status, budgetId, grantId, startDate, endDate } = req.query;
     let query = {};
@@ -348,7 +348,7 @@ router.get('/expenses', protect, authorize('admin', 'staff'), async (req, res) =
 });
 
 // Create expense
-router.post('/expenses', protect, authorize('admin', 'staff', 'worker'), async (req, res) => {
+router.post('/expenses', protect, authorize(['admin', 'staff', 'worker']), async (req, res) => {
   try {
     const expenseData = {
       ...req.body,
@@ -366,7 +366,7 @@ router.post('/expenses', protect, authorize('admin', 'staff', 'worker'), async (
 });
 
 // Approve expense
-router.patch('/expenses/:id/approve', protect, authorize('admin', 'staff'), async (req, res) => {
+router.patch('/expenses/:id/approve', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const expense = await Expense.findById(req.params.id);
     
@@ -406,7 +406,7 @@ router.patch('/expenses/:id/approve', protect, authorize('admin', 'staff'), asyn
 // ========== FINANCIAL REPORTS ==========
 
 // Get financial summary
-router.get('/reports/summary', protect, authorize('admin', 'staff'), async (req, res) => {
+router.get('/reports/summary', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const { startDate, endDate } = req.query;
     const dateFilter = {};

@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { auth, checkRole } = require('../middleware/auth');
+const { protect, authorize } = require('../middleware/auth');
 const { InventoryItem, InventoryTransaction, EquipmentCheckout, PurchaseOrder } = require('../models/Inventory');
 
 // ==================== INVENTORY ITEMS ====================
 
 // Get all inventory items
-router.get('/items', auth, async (req, res) => {
+router.get('/items', protect, async (req, res) => {
   try {
     const { category, status, search, lowStock } = req.query;
     const filter = {};
@@ -35,7 +35,7 @@ router.get('/items', auth, async (req, res) => {
 });
 
 // Get item by ID
-router.get('/items/:id', auth, async (req, res) => {
+router.get('/items/:id', protect, async (req, res) => {
   try {
     const item = await InventoryItem.findById(req.params.id);
     
@@ -50,7 +50,7 @@ router.get('/items/:id', auth, async (req, res) => {
 });
 
 // Create item
-router.post('/items', auth, checkRole(['admin', 'staff']), async (req, res) => {
+router.post('/items', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const item = new InventoryItem(req.body);
     await item.save();
@@ -62,7 +62,7 @@ router.post('/items', auth, checkRole(['admin', 'staff']), async (req, res) => {
 });
 
 // Update item
-router.put('/items/:id', auth, checkRole(['admin', 'staff']), async (req, res) => {
+router.put('/items/:id', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const item = await InventoryItem.findByIdAndUpdate(
       req.params.id,
@@ -81,7 +81,7 @@ router.put('/items/:id', auth, checkRole(['admin', 'staff']), async (req, res) =
 });
 
 // Delete item
-router.delete('/items/:id', auth, checkRole(['admin']), async (req, res) => {
+router.delete('/items/:id', protect, authorize(['admin']), async (req, res) => {
   try {
     const item = await InventoryItem.findByIdAndDelete(req.params.id);
     
@@ -96,7 +96,7 @@ router.delete('/items/:id', auth, checkRole(['admin']), async (req, res) => {
 });
 
 // Get low stock items
-router.get('/items/alerts/low-stock', auth, checkRole(['admin', 'staff']), async (req, res) => {
+router.get('/items/alerts/low-stock', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const items = await InventoryItem.find({ status: 'active' });
     const lowStockItems = items.filter(item => item.isLowStock);
@@ -110,7 +110,7 @@ router.get('/items/alerts/low-stock', auth, checkRole(['admin', 'staff']), async
 // ==================== TRANSACTIONS ====================
 
 // Get transactions
-router.get('/transactions', auth, async (req, res) => {
+router.get('/transactions', protect, async (req, res) => {
   try {
     const { itemId, transactionType, startDate, endDate } = req.query;
     const filter = {};
@@ -137,7 +137,7 @@ router.get('/transactions', auth, async (req, res) => {
 });
 
 // Record transaction
-router.post('/transactions', auth, checkRole(['admin', 'staff', 'worker']), async (req, res) => {
+router.post('/transactions', protect, authorize(['admin', 'staff', 'worker']), async (req, res) => {
   try {
     const { itemId, transactionType, quantity, reason, notes, cost } = req.body;
     
@@ -204,7 +204,7 @@ router.post('/transactions', auth, checkRole(['admin', 'staff', 'worker']), asyn
 // ==================== EQUIPMENT CHECKOUT ====================
 
 // Get checkouts
-router.get('/checkouts', auth, async (req, res) => {
+router.get('/checkouts', protect, async (req, res) => {
   try {
     const { status, userId, itemId } = req.query;
     const filter = {};
@@ -232,7 +232,7 @@ router.get('/checkouts', auth, async (req, res) => {
 });
 
 // Checkout equipment
-router.post('/checkouts', auth, async (req, res) => {
+router.post('/checkouts', protect, async (req, res) => {
   try {
     const { itemId, userId, expectedReturnDate, checkoutNotes } = req.body;
     
@@ -284,7 +284,7 @@ router.post('/checkouts', auth, async (req, res) => {
 });
 
 // Return equipment
-router.patch('/checkouts/:id/return', auth, async (req, res) => {
+router.patch('/checkouts/:id/return', protect, async (req, res) => {
   try {
     const { returnCondition, returnNotes, damageReport } = req.body;
     
@@ -340,7 +340,7 @@ router.patch('/checkouts/:id/return', auth, async (req, res) => {
 });
 
 // Get overdue checkouts
-router.get('/checkouts/alerts/overdue', auth, checkRole(['admin', 'staff']), async (req, res) => {
+router.get('/checkouts/alerts/overdue', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const checkouts = await EquipmentCheckout.find({
       status: 'checked_out',
@@ -359,7 +359,7 @@ router.get('/checkouts/alerts/overdue', auth, checkRole(['admin', 'staff']), asy
 // ==================== PURCHASE ORDERS ====================
 
 // Get purchase orders
-router.get('/purchase-orders', auth, checkRole(['admin', 'staff']), async (req, res) => {
+router.get('/purchase-orders', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const { status } = req.query;
     const filter = {};
@@ -379,7 +379,7 @@ router.get('/purchase-orders', auth, checkRole(['admin', 'staff']), async (req, 
 });
 
 // Create purchase order
-router.post('/purchase-orders', auth, checkRole(['admin', 'staff']), async (req, res) => {
+router.post('/purchase-orders', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const orderData = {
       ...req.body,
@@ -396,7 +396,7 @@ router.post('/purchase-orders', auth, checkRole(['admin', 'staff']), async (req,
 });
 
 // Update purchase order
-router.put('/purchase-orders/:id', auth, checkRole(['admin', 'staff']), async (req, res) => {
+router.put('/purchase-orders/:id', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const order = await PurchaseOrder.findByIdAndUpdate(
       req.params.id,
@@ -415,7 +415,7 @@ router.put('/purchase-orders/:id', auth, checkRole(['admin', 'staff']), async (r
 });
 
 // Approve purchase order
-router.patch('/purchase-orders/:id/approve', auth, checkRole(['admin']), async (req, res) => {
+router.patch('/purchase-orders/:id/approve', protect, authorize(['admin']), async (req, res) => {
   try {
     const order = await PurchaseOrder.findById(req.params.id);
     
@@ -434,7 +434,7 @@ router.patch('/purchase-orders/:id/approve', auth, checkRole(['admin']), async (
 });
 
 // Receive purchase order
-router.patch('/purchase-orders/:id/receive', auth, checkRole(['admin', 'staff']), async (req, res) => {
+router.patch('/purchase-orders/:id/receive', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const order = await PurchaseOrder.findById(req.params.id);
     

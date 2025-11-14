@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const { Volunteer, VolunteerShift, VolunteerHours, VolunteerRecognition } = require('../models/Volunteer');
-const auth = require('../middleware/auth');
+const { protect, authorize } = require('../middleware/auth');
 
 // Volunteer Routes
 
 // Get all volunteers
-router.get('/', auth, async (req, res) => {
+router.get('/', protect, async (req, res) => {
   try {
     const { status, skills, coordinator, page = 1, limit = 100 } = req.query;
     
@@ -36,7 +36,7 @@ router.get('/', auth, async (req, res) => {
 });
 
 // Get volunteer by ID
-router.get('/:id', auth, async (req, res) => {
+router.get('/:id', protect, async (req, res) => {
   try {
     const volunteer = await Volunteer.findById(req.params.id)
       .populate('userId', 'name email phone')
@@ -53,7 +53,7 @@ router.get('/:id', auth, async (req, res) => {
 });
 
 // Register volunteer
-router.post('/', auth, async (req, res) => {
+router.post('/', protect, async (req, res) => {
   try {
     const volunteer = new Volunteer({
       ...req.body,
@@ -68,7 +68,7 @@ router.post('/', auth, async (req, res) => {
 });
 
 // Update volunteer
-router.put('/:id', auth, async (req, res) => {
+router.put('/:id', protect, async (req, res) => {
   try {
     const volunteer = await Volunteer.findByIdAndUpdate(
       req.params.id,
@@ -87,7 +87,7 @@ router.put('/:id', auth, async (req, res) => {
 });
 
 // Update volunteer status
-router.patch('/:id/status', auth, async (req, res) => {
+router.patch('/:id/status', protect, async (req, res) => {
   try {
     const { status } = req.body;
     
@@ -114,7 +114,7 @@ router.patch('/:id/status', auth, async (req, res) => {
 });
 
 // Get total hours for volunteer
-router.get('/:id/hours/total', auth, async (req, res) => {
+router.get('/:id/hours/total', protect, async (req, res) => {
   try {
     const result = await VolunteerHours.aggregate([
       { $match: { volunteerId: mongoose.Types.ObjectId(req.params.id), status: 'approved' } },
@@ -135,7 +135,7 @@ router.get('/:id/hours/total', auth, async (req, res) => {
 // Shift Routes
 
 // Get all shifts
-router.get('/shifts', auth, async (req, res) => {
+router.get('/shifts', protect, async (req, res) => {
   try {
     const { status, startDate, endDate, coordinator, page = 1, limit = 100 } = req.query;
     
@@ -169,7 +169,7 @@ router.get('/shifts', auth, async (req, res) => {
 });
 
 // Create shift
-router.post('/shifts', auth, async (req, res) => {
+router.post('/shifts', protect, async (req, res) => {
   try {
     const shift = new VolunteerShift({
       ...req.body,
@@ -185,7 +185,7 @@ router.post('/shifts', auth, async (req, res) => {
 });
 
 // Update shift
-router.put('/shifts/:id', auth, async (req, res) => {
+router.put('/shifts/:id', protect, async (req, res) => {
   try {
     const shift = await VolunteerShift.findByIdAndUpdate(
       req.params.id,
@@ -204,7 +204,7 @@ router.put('/shifts/:id', auth, async (req, res) => {
 });
 
 // Volunteer signup for shift
-router.post('/shifts/:id/signup', auth, async (req, res) => {
+router.post('/shifts/:id/signup', protect, async (req, res) => {
   try {
     const { volunteerId, role } = req.body;
     
@@ -248,7 +248,7 @@ router.post('/shifts/:id/signup', auth, async (req, res) => {
 });
 
 // Mark shift attendance
-router.patch('/shifts/:id/attendance', auth, async (req, res) => {
+router.patch('/shifts/:id/attendance', protect, async (req, res) => {
   try {
     const { volunteerId, checkInTime, checkOutTime, status } = req.body;
     
@@ -306,7 +306,7 @@ router.patch('/shifts/:id/attendance', auth, async (req, res) => {
 // Hour Tracking Routes
 
 // Get volunteer hours
-router.get('/hours', auth, async (req, res) => {
+router.get('/hours', protect, async (req, res) => {
   try {
     const { volunteerId, startDate, endDate, status, page = 1, limit = 100 } = req.query;
     
@@ -341,7 +341,7 @@ router.get('/hours', auth, async (req, res) => {
 });
 
 // Log volunteer hours
-router.post('/hours', auth, async (req, res) => {
+router.post('/hours', protect, async (req, res) => {
   try {
     const hourRecord = new VolunteerHours({
       ...req.body,
@@ -356,7 +356,7 @@ router.post('/hours', auth, async (req, res) => {
 });
 
 // Generate hour reports
-router.get('/hours/reports', auth, async (req, res) => {
+router.get('/hours/reports', protect, async (req, res) => {
   try {
     const { volunteerId, startDate, endDate, groupBy = 'volunteer' } = req.query;
     
@@ -393,7 +393,7 @@ router.get('/hours/reports', auth, async (req, res) => {
 // Recognition Routes
 
 // Get recognition awards
-router.get('/recognition', auth, async (req, res) => {
+router.get('/recognition', protect, async (req, res) => {
   try {
     const { volunteerId, recognitionType, isPublic, page = 1, limit = 100 } = req.query;
     
@@ -423,7 +423,7 @@ router.get('/recognition', auth, async (req, res) => {
 });
 
 // Create recognition
-router.post('/recognition', auth, async (req, res) => {
+router.post('/recognition', protect, async (req, res) => {
   try {
     const recognition = new VolunteerRecognition({
       ...req.body,
@@ -438,7 +438,7 @@ router.post('/recognition', auth, async (req, res) => {
 });
 
 // Get volunteer leaderboard
-router.get('/recognition/leaderboard', auth, async (req, res) => {
+router.get('/recognition/leaderboard', protect, async (req, res) => {
   try {
     const { period = 'all', limit = 10 } = req.query;
     

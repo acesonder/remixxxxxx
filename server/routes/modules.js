@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
 });
 
 // Update module configuration
-router.put('/', protect, authorize('admin'), async (req, res) => {
+router.put('/', protect, authorize(['admin']), async (req, res) => {
   try {
     const organizationId = req.body.organizationId || 'default';
     const updateData = req.body;
@@ -45,7 +45,7 @@ router.put('/', protect, authorize('admin'), async (req, res) => {
 });
 
 // Update specific module
-router.patch('/:moduleName', protect, authorize('admin'), async (req, res) => {
+router.patch('/:moduleName', protect, authorize(['admin']), async (req, res) => {
   try {
     const { moduleName } = req.params;
     const organizationId = req.body.organizationId || 'default';
@@ -64,7 +64,7 @@ router.patch('/:moduleName', protect, authorize('admin'), async (req, res) => {
 });
 
 // Update branding
-router.patch('/branding', protect, authorize('admin'), async (req, res) => {
+router.patch('/branding', protect, authorize(['admin']), async (req, res) => {
   try {
     const organizationId = req.body.organizationId || 'default';
     const brandingData = req.body.branding;
@@ -82,7 +82,7 @@ router.patch('/branding', protect, authorize('admin'), async (req, res) => {
 });
 
 // Update layout configuration
-router.patch('/layout', protect, authorize('admin'), async (req, res) => {
+router.patch('/layout', protect, authorize(['admin']), async (req, res) => {
   try {
     const organizationId = req.body.organizationId || 'default';
     const layoutData = req.body.layout;

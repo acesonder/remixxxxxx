@@ -56,7 +56,7 @@ router.get('/:id', protect, async (req, res) => {
 });
 
 // Create resource
-router.post('/', protect, authorize('admin', 'staff', 'service_provider'), async (req, res) => {
+router.post('/', protect, authorize(['admin', 'staff', 'service_provider']), async (req, res) => {
   try {
     const resourceData = {
       ...req.body,
@@ -71,7 +71,7 @@ router.post('/', protect, authorize('admin', 'staff', 'service_provider'), async
 });
 
 // Update resource
-router.put('/:id', protect, authorize('admin', 'staff', 'service_provider'), async (req, res) => {
+router.put('/:id', protect, authorize(['admin', 'staff', 'service_provider']), async (req, res) => {
   try {
     const resource = await Resource.findById(req.params.id);
 
@@ -97,7 +97,7 @@ router.put('/:id', protect, authorize('admin', 'staff', 'service_provider'), asy
 });
 
 // Delete resource
-router.delete('/:id', protect, authorize('admin', 'staff'), async (req, res) => {
+router.delete('/:id', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const resource = await Resource.findByIdAndDelete(req.params.id);
 

@@ -4,7 +4,7 @@ const Assessment = require('../models/Assessment');
 const { protect, authorize } = require('../middleware/auth');
 
 // Get all assessments
-router.get('/', protect, authorize('admin', 'staff', 'worker', 'service_provider'), async (req, res) => {
+router.get('/', protect, authorize(['admin', 'staff', 'worker', 'service_provider']), async (req, res) => {
   try {
     const { clientId, assessmentType, status } = req.query;
     let query = {};
@@ -42,7 +42,7 @@ router.get('/:id', protect, async (req, res) => {
 });
 
 // Create assessment
-router.post('/', protect, authorize('admin', 'staff', 'worker', 'service_provider'), async (req, res) => {
+router.post('/', protect, authorize(['admin', 'staff', 'worker', 'service_provider']), async (req, res) => {
   try {
     const assessmentData = {
       ...req.body,
@@ -57,7 +57,7 @@ router.post('/', protect, authorize('admin', 'staff', 'worker', 'service_provide
 });
 
 // Update assessment
-router.put('/:id', protect, authorize('admin', 'staff', 'worker', 'service_provider'), async (req, res) => {
+router.put('/:id', protect, authorize(['admin', 'staff', 'worker', 'service_provider']), async (req, res) => {
   try {
     const assessment = await Assessment.findByIdAndUpdate(
       req.params.id,
@@ -76,7 +76,7 @@ router.put('/:id', protect, authorize('admin', 'staff', 'worker', 'service_provi
 });
 
 // Delete assessment
-router.delete('/:id', protect, authorize('admin'), async (req, res) => {
+router.delete('/:id', protect, authorize(['admin']), async (req, res) => {
   try {
     const assessment = await Assessment.findByIdAndDelete(req.params.id);
 

@@ -9,7 +9,7 @@ const Incident = require('../models/Incident');
 const { protect, authorize } = require('../middleware/auth');
 
 // Get all reports
-router.get('/reports', protect, authorize('admin', 'staff', 'service_provider'), async (req, res) => {
+router.get('/reports', protect, authorize(['admin', 'staff', 'service_provider']), async (req, res) => {
   try {
     const { category, isTemplate, search } = req.query;
     let query = {};
@@ -65,7 +65,7 @@ router.get('/reports/:id', protect, async (req, res) => {
 });
 
 // Create new report
-router.post('/reports', protect, authorize('admin', 'staff', 'service_provider'), async (req, res) => {
+router.post('/reports', protect, authorize(['admin', 'staff', 'service_provider']), async (req, res) => {
   try {
     const reportData = {
       ...req.body,
@@ -80,7 +80,7 @@ router.post('/reports', protect, authorize('admin', 'staff', 'service_provider')
 });
 
 // Update report
-router.put('/reports/:id', protect, authorize('admin', 'staff', 'service_provider'), async (req, res) => {
+router.put('/reports/:id', protect, authorize(['admin', 'staff', 'service_provider']), async (req, res) => {
   try {
     const report = await Report.findById(req.params.id);
 
@@ -186,7 +186,7 @@ router.get('/reports/:id/export', protect, async (req, res) => {
 });
 
 // Delete report
-router.delete('/reports/:id', protect, authorize('admin', 'staff'), async (req, res) => {
+router.delete('/reports/:id', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const report = await Report.findById(req.params.id);
 

@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const { HousingUnit, HousingApplication, Lease, Waitlist } = require('../models/Housing');
-const auth = require('../middleware/auth');
+const { protect, authorize } = require('../middleware/auth');
 
 // Housing Unit Routes
 
 // Get all housing units
-router.get('/units', auth, async (req, res) => {
+router.get('/units', protect, async (req, res) => {
   try {
     const { status, unitType, accessibility, page = 1, limit = 100 } = req.query;
     
@@ -37,7 +37,7 @@ router.get('/units', auth, async (req, res) => {
 });
 
 // Get unit by ID
-router.get('/units/:id', auth, async (req, res) => {
+router.get('/units/:id', protect, async (req, res) => {
   try {
     const unit = await HousingUnit.findById(req.params.id)
       .populate('currentLeaseId');
@@ -53,7 +53,7 @@ router.get('/units/:id', auth, async (req, res) => {
 });
 
 // Create housing unit
-router.post('/units', auth, async (req, res) => {
+router.post('/units', protect, async (req, res) => {
   try {
     const unit = new HousingUnit(req.body);
     await unit.save();
@@ -64,7 +64,7 @@ router.post('/units', auth, async (req, res) => {
 });
 
 // Update housing unit
-router.put('/units/:id', auth, async (req, res) => {
+router.put('/units/:id', protect, async (req, res) => {
   try {
     const unit = await HousingUnit.findByIdAndUpdate(
       req.params.id,
@@ -83,7 +83,7 @@ router.put('/units/:id', auth, async (req, res) => {
 });
 
 // Get available units
-router.get('/units/available/list', auth, async (req, res) => {
+router.get('/units/available/list', protect, async (req, res) => {
   try {
     const { unitType, bedrooms, maxRent } = req.query;
     
@@ -103,7 +103,7 @@ router.get('/units/available/list', auth, async (req, res) => {
 // Housing Application Routes
 
 // Get all applications
-router.get('/applications', auth, async (req, res) => {
+router.get('/applications', protect, async (req, res) => {
   try {
     const { status, applicantId, priority, page = 1, limit = 100 } = req.query;
     
@@ -133,7 +133,7 @@ router.get('/applications', auth, async (req, res) => {
 });
 
 // Create housing application
-router.post('/applications', auth, async (req, res) => {
+router.post('/applications', protect, async (req, res) => {
   try {
     // Generate unique application number
     const count = await HousingApplication.countDocuments();
@@ -152,7 +152,7 @@ router.post('/applications', auth, async (req, res) => {
 });
 
 // Update housing application
-router.put('/applications/:id', auth, async (req, res) => {
+router.put('/applications/:id', protect, async (req, res) => {
   try {
     const application = await HousingApplication.findByIdAndUpdate(
       req.params.id,
@@ -171,7 +171,7 @@ router.put('/applications/:id', auth, async (req, res) => {
 });
 
 // Approve/Deny application
-router.patch('/applications/:id/review', auth, async (req, res) => {
+router.patch('/applications/:id/review', protect, async (req, res) => {
   try {
     const { status, reviewNotes, denialReason } = req.body;
     
@@ -208,7 +208,7 @@ router.patch('/applications/:id/review', auth, async (req, res) => {
 // Lease Routes
 
 // Get all leases
-router.get('/leases', auth, async (req, res) => {
+router.get('/leases', protect, async (req, res) => {
   try {
     const { status, unitId, tenantId, page = 1, limit = 100 } = req.query;
     
@@ -238,7 +238,7 @@ router.get('/leases', auth, async (req, res) => {
 });
 
 // Create lease
-router.post('/leases', auth, async (req, res) => {
+router.post('/leases', protect, async (req, res) => {
   try {
     // Generate unique lease number
     const count = await Lease.countDocuments();
@@ -266,7 +266,7 @@ router.post('/leases', auth, async (req, res) => {
 });
 
 // Update lease
-router.put('/leases/:id', auth, async (req, res) => {
+router.put('/leases/:id', protect, async (req, res) => {
   try {
     const lease = await Lease.findByIdAndUpdate(
       req.params.id,
@@ -285,7 +285,7 @@ router.put('/leases/:id', auth, async (req, res) => {
 });
 
 // Terminate lease
-router.patch('/leases/:id/terminate', auth, async (req, res) => {
+router.patch('/leases/:id/terminate', protect, async (req, res) => {
   try {
     const { terminationReason, terminatedBy, moveOutDate } = req.body;
     
@@ -319,7 +319,7 @@ router.patch('/leases/:id/terminate', auth, async (req, res) => {
 });
 
 // Get expiring leases
-router.get('/leases/expiring/soon', auth, async (req, res) => {
+router.get('/leases/expiring/soon', protect, async (req, res) => {
   try {
     const { days = 30 } = req.query;
     
@@ -344,7 +344,7 @@ router.get('/leases/expiring/soon', auth, async (req, res) => {
 // Waitlist Routes
 
 // Get waitlist
-router.get('/waitlist', auth, async (req, res) => {
+router.get('/waitlist', protect, async (req, res) => {
   try {
     const { status, priority, page = 1, limit = 100 } = req.query;
     
@@ -373,7 +373,7 @@ router.get('/waitlist', auth, async (req, res) => {
 });
 
 // Add to waitlist
-router.post('/waitlist', auth, async (req, res) => {
+router.post('/waitlist', protect, async (req, res) => {
   try {
     // Calculate position
     const count = await Waitlist.countDocuments({ status: 'active' });
@@ -391,7 +391,7 @@ router.post('/waitlist', auth, async (req, res) => {
 });
 
 // Update waitlist entry
-router.put('/waitlist/:id', auth, async (req, res) => {
+router.put('/waitlist/:id', protect, async (req, res) => {
   try {
     const entry = await Waitlist.findByIdAndUpdate(
       req.params.id,
@@ -410,7 +410,7 @@ router.put('/waitlist/:id', auth, async (req, res) => {
 });
 
 // Make housing offer
-router.post('/waitlist/:id/offer', auth, async (req, res) => {
+router.post('/waitlist/:id/offer', protect, async (req, res) => {
   try {
     const { unitId, expirationDate } = req.body;
     

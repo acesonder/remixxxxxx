@@ -396,12 +396,10 @@ const expenseSchema = new mongoose.Schema({
 
 // Indexes
 invoiceSchema.index({ clientId: 1, status: 1 });
-invoiceSchema.index({ invoiceNumber: 1 });
 invoiceSchema.index({ dueDate: 1, status: 1 });
 
 paymentSchema.index({ clientId: 1, paymentDate: -1 });
 paymentSchema.index({ invoiceId: 1 });
-paymentSchema.index({ paymentNumber: 1 });
 
 grantSchema.index({ status: 1, endDate: 1 });
 grantSchema.index({ fundingSource: 1 });
@@ -416,7 +414,6 @@ budgetSchema.index({ fiscalYear: 1, status: 1 });
 expenseSchema.index({ date: 1, category: 1 });
 expenseSchema.index({ budgetId: 1 });
 expenseSchema.index({ grantId: 1 });
-expenseSchema.index({ expenseNumber: 1 });
 
 const Invoice = mongoose.model('Invoice', invoiceSchema);
 const Payment = mongoose.model('Payment', paymentSchema);

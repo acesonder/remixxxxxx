@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { auth, checkRole } = require('../middleware/auth');
+const { protect, authorize } = require('../middleware/auth');
 const { Course, Certification, ComplianceRecord } = require('../models/Training');
 
 // ==================== COURSES ====================
 
 // Get all courses
-router.get('/courses', auth, async (req, res) => {
+router.get('/courses', protect, async (req, res) => {
   try {
     const { status, category, difficulty, search } = req.query;
     const filter = {};
@@ -34,7 +34,7 @@ router.get('/courses', auth, async (req, res) => {
 });
 
 // Get course by ID
-router.get('/courses/:id', auth, async (req, res) => {
+router.get('/courses/:id', protect, async (req, res) => {
   try {
     const course = await Course.findById(req.params.id)
       .populate('instructor', 'firstName lastName email')
@@ -51,7 +51,7 @@ router.get('/courses/:id', auth, async (req, res) => {
 });
 
 // Create course
-router.post('/courses', auth, checkRole(['admin', 'staff']), async (req, res) => {
+router.post('/courses', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const courseData = {
       ...req.body,
@@ -68,7 +68,7 @@ router.post('/courses', auth, checkRole(['admin', 'staff']), async (req, res) =>
 });
 
 // Update course
-router.put('/courses/:id', auth, checkRole(['admin', 'staff']), async (req, res) => {
+router.put('/courses/:id', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const course = await Course.findByIdAndUpdate(
       req.params.id,
@@ -87,7 +87,7 @@ router.put('/courses/:id', auth, checkRole(['admin', 'staff']), async (req, res)
 });
 
 // Enroll in course
-router.post('/courses/:id/enroll', auth, async (req, res) => {
+router.post('/courses/:id/enroll', protect, async (req, res) => {
   try {
     const course = await Course.findById(req.params.id);
     
@@ -132,7 +132,7 @@ router.post('/courses/:id/enroll', auth, async (req, res) => {
 });
 
 // Update course progress
-router.patch('/courses/:id/progress', auth, async (req, res) => {
+router.patch('/courses/:id/progress', protect, async (req, res) => {
   try {
     const { lessonNumber, quizScore, quizAttempts } = req.body;
     
@@ -199,7 +199,7 @@ router.patch('/courses/:id/progress', auth, async (req, res) => {
 });
 
 // Mark course complete (issues certificate if configured)
-router.post('/courses/:id/complete', auth, async (req, res) => {
+router.post('/courses/:id/complete', protect, async (req, res) => {
   try {
     const course = await Course.findById(req.params.id);
     
@@ -253,7 +253,7 @@ router.post('/courses/:id/complete', auth, async (req, res) => {
 // ==================== CERTIFICATIONS ====================
 
 // Get all certifications
-router.get('/certifications', auth, async (req, res) => {
+router.get('/certifications', protect, async (req, res) => {
   try {
     const { status, userId, certificationType } = req.query;
     const filter = {};
@@ -281,7 +281,7 @@ router.get('/certifications', auth, async (req, res) => {
 });
 
 // Issue certification
-router.post('/certifications', auth, checkRole(['admin', 'staff']), async (req, res) => {
+router.post('/certifications', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const certification = new Certification(req.body);
     await certification.save();
@@ -293,7 +293,7 @@ router.post('/certifications', auth, checkRole(['admin', 'staff']), async (req, 
 });
 
 // Renew certification
-router.patch('/certifications/:id/renew', auth, checkRole(['admin', 'staff']), async (req, res) => {
+router.patch('/certifications/:id/renew', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const { renewalDate, expirationDate } = req.body;
     
@@ -318,7 +318,7 @@ router.patch('/certifications/:id/renew', auth, checkRole(['admin', 'staff']), a
 });
 
 // Get user certifications
-router.get('/certifications/user/:userId', auth, async (req, res) => {
+router.get('/certifications/user/:userId', protect, async (req, res) => {
   try {
     // Users can only view their own certifications unless admin/staff
     if (req.user.userId !== req.params.userId && req.user.role !== 'admin' && req.user.role !== 'staff') {
@@ -336,7 +336,7 @@ router.get('/certifications/user/:userId', auth, async (req, res) => {
 });
 
 // Get expiring certifications
-router.get('/certifications/expiring', auth, checkRole(['admin', 'staff']), async (req, res) => {
+router.get('/certifications/expiring', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const daysAhead = parseInt(req.query.days) || 30;
     const futureDate = new Date();
@@ -358,7 +358,7 @@ router.get('/certifications/expiring', auth, checkRole(['admin', 'staff']), asyn
 // ==================== COMPLIANCE ====================
 
 // Get compliance records
-router.get('/compliance', auth, async (req, res) => {
+router.get('/compliance', protect, async (req, res) => {
   try {
     const { userId, status, complianceType } = req.query;
     const filter = {};
@@ -387,7 +387,7 @@ router.get('/compliance', auth, async (req, res) => {
 });
 
 // Create compliance requirement
-router.post('/compliance', auth, checkRole(['admin', 'staff']), async (req, res) => {
+router.post('/compliance', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const record = new ComplianceRecord(req.body);
     await record.save();
@@ -399,7 +399,7 @@ router.post('/compliance', auth, checkRole(['admin', 'staff']), async (req, res)
 });
 
 // Mark compliance complete
-router.patch('/compliance/:id/complete', auth, async (req, res) => {
+router.patch('/compliance/:id/complete', protect, async (req, res) => {
   try {
     const { evidence, notes } = req.body;
     
@@ -455,7 +455,7 @@ router.patch('/compliance/:id/complete', auth, async (req, res) => {
 });
 
 // Get due compliance items
-router.get('/compliance/due', auth, checkRole(['admin', 'staff']), async (req, res) => {
+router.get('/compliance/due', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const daysAhead = parseInt(req.query.days) || 7;
     const futureDate = new Date();
@@ -477,7 +477,7 @@ router.get('/compliance/due', auth, checkRole(['admin', 'staff']), async (req, r
 // ==================== TRANSCRIPTS & CERTIFICATES ====================
 
 // Get training transcript for a user
-router.get('/transcripts/:userId', auth, async (req, res) => {
+router.get('/transcripts/:userId', protect, async (req, res) => {
   try {
     // Users can only view their own transcript unless admin/staff
     if (req.user.userId !== req.params.userId && req.user.role !== 'admin' && req.user.role !== 'staff') {
@@ -540,7 +540,7 @@ router.get('/transcripts/:userId', auth, async (req, res) => {
 });
 
 // Get certificate details
-router.get('/certificates/:certId', auth, async (req, res) => {
+router.get('/certificates/:certId', protect, async (req, res) => {
   try {
     const certification = await Certification.findById(req.params.certId)
       .populate('userId', 'firstName lastName email')

@@ -50,7 +50,7 @@ router.get('/:id', protect, async (req, res) => {
 });
 
 // Create survey
-router.post('/', protect, authorize('admin', 'staff', 'worker', 'service_provider'), async (req, res) => {
+router.post('/', protect, authorize(['admin', 'staff', 'worker', 'service_provider']), async (req, res) => {
   try {
     const surveyData = {
       ...req.body,
@@ -68,7 +68,7 @@ router.post('/', protect, authorize('admin', 'staff', 'worker', 'service_provide
 });
 
 // Update survey
-router.put('/:id', protect, authorize('admin', 'staff', 'worker', 'service_provider'), async (req, res) => {
+router.put('/:id', protect, authorize(['admin', 'staff', 'worker', 'service_provider']), async (req, res) => {
   try {
     const survey = await Survey.findById(req.params.id);
 
@@ -98,7 +98,7 @@ router.put('/:id', protect, authorize('admin', 'staff', 'worker', 'service_provi
 });
 
 // Delete survey
-router.delete('/:id', protect, authorize('admin', 'staff'), async (req, res) => {
+router.delete('/:id', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const survey = await Survey.findById(req.params.id);
 
@@ -204,7 +204,7 @@ router.post('/:id/responses', protect, async (req, res) => {
 });
 
 // Get survey responses
-router.get('/:id/responses', protect, authorize('admin', 'staff', 'worker', 'service_provider'), async (req, res) => {
+router.get('/:id/responses', protect, authorize(['admin', 'staff', 'worker', 'service_provider']), async (req, res) => {
   try {
     const survey = await Survey.findById(req.params.id);
 
@@ -235,7 +235,7 @@ router.get('/:id/responses', protect, authorize('admin', 'staff', 'worker', 'ser
 });
 
 // Get survey analytics
-router.get('/:id/analytics', protect, authorize('admin', 'staff', 'worker', 'service_provider'), async (req, res) => {
+router.get('/:id/analytics', protect, authorize(['admin', 'staff', 'worker', 'service_provider']), async (req, res) => {
   try {
     const survey = await Survey.findById(req.params.id);
 
@@ -314,7 +314,7 @@ router.get('/:id/analytics', protect, authorize('admin', 'staff', 'worker', 'ser
 });
 
 // Export survey responses (CSV format data)
-router.get('/:id/export', protect, authorize('admin', 'staff'), async (req, res) => {
+router.get('/:id/export', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const survey = await Survey.findById(req.params.id);
 
