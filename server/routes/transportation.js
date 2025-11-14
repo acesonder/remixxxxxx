@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const { Vehicle, RideRequest, Ride, Route } = require('../models/Transportation');
-const auth = require('../middleware/auth');
+const { protect, authorize } = require('../middleware/auth');
 
 // Vehicle Routes
 
 // Get all vehicles
-router.get('/vehicles', auth, async (req, res) => {
+router.get('/vehicles', protect, async (req, res) => {
   try {
     const { status, vehicleType, page = 1, limit = 100 } = req.query;
     
@@ -34,7 +34,7 @@ router.get('/vehicles', auth, async (req, res) => {
 });
 
 // Get vehicle by ID
-router.get('/vehicles/:id', auth, async (req, res) => {
+router.get('/vehicles/:id', protect, async (req, res) => {
   try {
     const vehicle = await Vehicle.findById(req.params.id)
       .populate('assignedDriver', 'name phone email');
@@ -50,7 +50,7 @@ router.get('/vehicles/:id', auth, async (req, res) => {
 });
 
 // Create vehicle
-router.post('/vehicles', auth, async (req, res) => {
+router.post('/vehicles', protect, async (req, res) => {
   try {
     const vehicle = new Vehicle(req.body);
     await vehicle.save();
@@ -61,7 +61,7 @@ router.post('/vehicles', auth, async (req, res) => {
 });
 
 // Update vehicle
-router.put('/vehicles/:id', auth, async (req, res) => {
+router.put('/vehicles/:id', protect, async (req, res) => {
   try {
     const vehicle = await Vehicle.findByIdAndUpdate(
       req.params.id,
@@ -82,7 +82,7 @@ router.put('/vehicles/:id', auth, async (req, res) => {
 // Ride Request Routes
 
 // Get all ride requests
-router.get('/requests', auth, async (req, res) => {
+router.get('/requests', protect, async (req, res) => {
   try {
     const { status, clientId, pickupDate, page = 1, limit = 100 } = req.query;
     
@@ -118,7 +118,7 @@ router.get('/requests', auth, async (req, res) => {
 });
 
 // Create ride request
-router.post('/requests', auth, async (req, res) => {
+router.post('/requests', protect, async (req, res) => {
   try {
     // Generate unique request number
     const count = await RideRequest.countDocuments();
@@ -138,7 +138,7 @@ router.post('/requests', auth, async (req, res) => {
 });
 
 // Update ride request
-router.put('/requests/:id', auth, async (req, res) => {
+router.put('/requests/:id', protect, async (req, res) => {
   try {
     const request = await RideRequest.findByIdAndUpdate(
       req.params.id,
@@ -157,7 +157,7 @@ router.put('/requests/:id', auth, async (req, res) => {
 });
 
 // Approve ride request
-router.patch('/requests/:id/approve', auth, async (req, res) => {
+router.patch('/requests/:id/approve', protect, async (req, res) => {
   try {
     const request = await RideRequest.findByIdAndUpdate(
       req.params.id,
@@ -182,7 +182,7 @@ router.patch('/requests/:id/approve', auth, async (req, res) => {
 // Ride Routes
 
 // Get all rides
-router.get('/rides', auth, async (req, res) => {
+router.get('/rides', protect, async (req, res) => {
   try {
     const { status, driverId, vehicleId, clientId, startDate, endDate, page = 1, limit = 100 } = req.query;
     
@@ -220,7 +220,7 @@ router.get('/rides', auth, async (req, res) => {
 });
 
 // Create ride from request
-router.post('/rides', auth, async (req, res) => {
+router.post('/rides', protect, async (req, res) => {
   try {
     // Generate unique ride number
     const count = await Ride.countDocuments();
@@ -248,7 +248,7 @@ router.post('/rides', auth, async (req, res) => {
 });
 
 // Update ride
-router.put('/rides/:id', auth, async (req, res) => {
+router.put('/rides/:id', protect, async (req, res) => {
   try {
     const ride = await Ride.findByIdAndUpdate(
       req.params.id,
@@ -267,7 +267,7 @@ router.put('/rides/:id', auth, async (req, res) => {
 });
 
 // Update ride status
-router.patch('/rides/:id/status', auth, async (req, res) => {
+router.patch('/rides/:id/status', protect, async (req, res) => {
   try {
     const { status, location } = req.body;
     
@@ -313,7 +313,7 @@ router.patch('/rides/:id/status', auth, async (req, res) => {
 });
 
 // Update ride location (GPS tracking)
-router.patch('/rides/:id/location', auth, async (req, res) => {
+router.patch('/rides/:id/location', protect, async (req, res) => {
   try {
     const { latitude, longitude } = req.body;
     
@@ -351,7 +351,7 @@ router.patch('/rides/:id/location', auth, async (req, res) => {
 // Route Routes
 
 // Get all routes
-router.get('/routes', auth, async (req, res) => {
+router.get('/routes', protect, async (req, res) => {
   try {
     const { status, driverId, routeDate, page = 1, limit = 100 } = req.query;
     
@@ -387,7 +387,7 @@ router.get('/routes', auth, async (req, res) => {
 });
 
 // Create route
-router.post('/routes', auth, async (req, res) => {
+router.post('/routes', protect, async (req, res) => {
   try {
     const route = new Route({
       ...req.body,
@@ -402,7 +402,7 @@ router.post('/routes', auth, async (req, res) => {
 });
 
 // Optimize route
-router.post('/routes/:id/optimize', auth, async (req, res) => {
+router.post('/routes/:id/optimize', protect, async (req, res) => {
   try {
     const route = await Route.findById(req.params.id);
     
@@ -426,7 +426,7 @@ router.post('/routes/:id/optimize', auth, async (req, res) => {
 });
 
 // Update route stop status
-router.patch('/routes/:id/stops/:stopNumber', auth, async (req, res) => {
+router.patch('/routes/:id/stops/:stopNumber', protect, async (req, res) => {
   try {
     const { status, actualTime } = req.body;
     

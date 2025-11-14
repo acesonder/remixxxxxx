@@ -77,7 +77,7 @@ router.get('/:id', protect, async (req, res) => {
 });
 
 // Create new appointment
-router.post('/', protect, authorize('admin', 'staff', 'worker', 'service_provider'), async (req, res) => {
+router.post('/', protect, authorize(['admin', 'staff', 'worker', 'service_provider']), async (req, res) => {
   try {
     const appointmentData = {
       ...req.body,
@@ -116,7 +116,7 @@ router.post('/', protect, authorize('admin', 'staff', 'worker', 'service_provide
 });
 
 // Update appointment
-router.put('/:id', protect, authorize('admin', 'staff', 'worker', 'service_provider'), async (req, res) => {
+router.put('/:id', protect, authorize(['admin', 'staff', 'worker', 'service_provider']), async (req, res) => {
   try {
     const appointment = await Appointment.findById(req.params.id);
 
@@ -176,7 +176,7 @@ router.patch('/:id/cancel', protect, async (req, res) => {
 });
 
 // Delete appointment
-router.delete('/:id', protect, authorize('admin', 'staff'), async (req, res) => {
+router.delete('/:id', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const appointment = await Appointment.findById(req.params.id);
 
@@ -209,7 +209,7 @@ router.get('/availability/:userId', protect, async (req, res) => {
 });
 
 // Set/update availability
-router.post('/availability', protect, authorize('admin', 'staff', 'worker', 'service_provider'), async (req, res) => {
+router.post('/availability', protect, authorize(['admin', 'staff', 'worker', 'service_provider']), async (req, res) => {
   try {
     const availabilityData = {
       ...req.body,

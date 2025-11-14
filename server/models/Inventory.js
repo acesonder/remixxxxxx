@@ -50,7 +50,6 @@ const inventoryItemSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Indexes
-inventoryItemSchema.index({ itemCode: 1 });
 inventoryItemSchema.index({ category: 1, status: 1 });
 inventoryItemSchema.index({ barcodes: 1 });
 inventoryItemSchema.index({ quantity: 1 });
@@ -195,7 +194,6 @@ const purchaseOrderSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Indexes
-purchaseOrderSchema.index({ orderNumber: 1 });
 purchaseOrderSchema.index({ status: 1 });
 purchaseOrderSchema.index({ orderDate: -1 });
 

@@ -109,7 +109,7 @@ router.get('/:id', protect, async (req, res) => {
 });
 
 // Create document
-router.post('/', protect, authorize('admin', 'staff', 'worker', 'service_provider'), async (req, res) => {
+router.post('/', protect, authorize(['admin', 'staff', 'worker', 'service_provider']), async (req, res) => {
   try {
     const documentData = {
       ...req.body,
@@ -139,7 +139,7 @@ router.post('/', protect, authorize('admin', 'staff', 'worker', 'service_provide
 });
 
 // Update document
-router.put('/:id', protect, authorize('admin', 'staff', 'worker', 'service_provider'), async (req, res) => {
+router.put('/:id', protect, authorize(['admin', 'staff', 'worker', 'service_provider']), async (req, res) => {
   try {
     const document = await Document.findById(req.params.id);
 
@@ -185,7 +185,7 @@ router.put('/:id', protect, authorize('admin', 'staff', 'worker', 'service_provi
 });
 
 // Delete document
-router.delete('/:id', protect, authorize('admin', 'staff'), async (req, res) => {
+router.delete('/:id', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const document = await Document.findById(req.params.id);
 
@@ -250,7 +250,7 @@ router.post('/:id/sign', protect, async (req, res) => {
 });
 
 // Update workflow step
-router.patch('/:id/workflow/:stepNumber', protect, authorize('admin', 'staff', 'worker', 'service_provider'), async (req, res) => {
+router.patch('/:id/workflow/:stepNumber', protect, authorize(['admin', 'staff', 'worker', 'service_provider']), async (req, res) => {
   try {
     const document = await Document.findById(req.params.id);
 
@@ -354,7 +354,7 @@ router.post('/templates/:id/create', protect, async (req, res) => {
 });
 
 // Get expiring documents
-router.get('/expiring/soon', protect, authorize('admin', 'staff'), async (req, res) => {
+router.get('/expiring/soon', protect, authorize(['admin', 'staff']), async (req, res) => {
   try {
     const daysAhead = parseInt(req.query.days) || 30;
     const futureDate = new Date();

@@ -4,7 +4,7 @@ const User = require('../models/User');
 const { protect, authorize } = require('../middleware/auth');
 
 // Get all users (admin/staff only)
-router.get('/', protect, authorize('admin', 'staff', 'worker'), async (req, res) => {
+router.get('/', protect, authorize(['admin', 'staff', 'worker']), async (req, res) => {
   try {
     const { role, search } = req.query;
     let query = {};

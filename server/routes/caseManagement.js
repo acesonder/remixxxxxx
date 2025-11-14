@@ -4,7 +4,7 @@ const CaseManagement = require('../models/CaseManagement');
 const { protect, authorize } = require('../middleware/auth');
 
 // Get all cases
-router.get('/', protect, authorize('admin', 'staff', 'worker', 'service_provider'), async (req, res) => {
+router.get('/', protect, authorize(['admin', 'staff', 'worker', 'service_provider']), async (req, res) => {
   try {
     const { clientId, caseManagerId, status, priority } = req.query;
     let query = {};
@@ -44,7 +44,7 @@ router.get('/:id', protect, async (req, res) => {
 });
 
 // Create case
-router.post('/', protect, authorize('admin', 'staff', 'worker', 'service_provider'), async (req, res) => {
+router.post('/', protect, authorize(['admin', 'staff', 'worker', 'service_provider']), async (req, res) => {
   try {
     const caseData = {
       ...req.body,
@@ -60,7 +60,7 @@ router.post('/', protect, authorize('admin', 'staff', 'worker', 'service_provide
 });
 
 // Update case
-router.put('/:id', protect, authorize('admin', 'staff', 'worker', 'service_provider'), async (req, res) => {
+router.put('/:id', protect, authorize(['admin', 'staff', 'worker', 'service_provider']), async (req, res) => {
   try {
     const caseData = await CaseManagement.findByIdAndUpdate(
       req.params.id,
@@ -79,7 +79,7 @@ router.put('/:id', protect, authorize('admin', 'staff', 'worker', 'service_provi
 });
 
 // Add note to case
-router.post('/:id/notes', protect, authorize('admin', 'staff', 'worker', 'service_provider'), async (req, res) => {
+router.post('/:id/notes', protect, authorize(['admin', 'staff', 'worker', 'service_provider']), async (req, res) => {
   try {
     const caseData = await CaseManagement.findById(req.params.id);
 
@@ -122,7 +122,7 @@ router.patch('/:id/location', protect, async (req, res) => {
 });
 
 // Delete case
-router.delete('/:id', protect, authorize('admin'), async (req, res) => {
+router.delete('/:id', protect, authorize(['admin']), async (req, res) => {
   try {
     const caseData = await CaseManagement.findByIdAndDelete(req.params.id);
 
